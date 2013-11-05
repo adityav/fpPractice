@@ -16,20 +16,36 @@ object Chapter5 {
 //      case Some(c) => c._1 :: c._2.toList
 //      case None => Nil
 //    }
+//    def toList:List[A] = {
+//      @tailrec
+//      def _tl(s:Stream[A], acc:List[A]):List[A] = s.uncons match {
+//        case Some((hd,tl)) => _tl(tl, hd :: acc)
+//        case None => acc
+//      }
+//      _tl(this, List.empty[A])
+//    }
+    //Best version
     def toList:List[A] = {
+      //Note list buffer. Not ArrayBuffer. ListBuffer to List is constant time.
+      val buf = collection.mutable.ListBuffer.empty[A]
       @tailrec
-      def _tl(s:Stream[A], acc:List[A]):List[A] = s.uncons match {
-        case Some((hd,tl)) => _tl(tl, hd :: acc)
-        case None => acc
+      def _tl(s:Stream[A]):List[A] = s.uncons match {
+        case Some((hd,tl)) =>
+          buf += hd
+          _tl(tl)
+        case None => buf.toList
       }
-      _tl(this, List.empty[A])
+      _tl(this)
     }
 
     //Ex2
-    def take(n:Int):Stream[A] = uncons match {
-      case Some((hd, tl)) => Stream.cons(hd, take(n -1))
-      case None => Stream.empty[A]
-    }
+    def take(n: Int): Stream[A] = if (n > 0) {
+      uncons match {
+        case Some((hd, tl)) => Stream.cons(hd, tl.take(n - 1))
+        case None => Stream.empty[A]
+      }
+    } else Stream.empty[A]
+
     //Ex3
     def takeWhile(p: A => Boolean):Stream[A] = {
       def _tw(s:Stream[A]):Stream[A] = {
