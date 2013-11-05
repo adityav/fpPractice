@@ -49,9 +49,9 @@ object Chapter5 {
     //Ex3
     def takeWhile(p: A => Boolean):Stream[A] = {
       def _tw(s:Stream[A]):Stream[A] = {
-        uncons match {
-          case Some((hd, tl)) => if(p(hd)) Stream.cons(hd, _tw(tl)) else Stream.empty[A]
-          case None => Stream.empty[A]
+        s.uncons match {
+          case Some((hd, tl)) if p(hd) => Stream.cons(hd, _tw(tl))
+          case _ => Stream.empty[A]
         }
       }
       _tw(this)
