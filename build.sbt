@@ -10,9 +10,12 @@ ideaExcludeFolders += ".idea"
 
 ideaExcludeFolders += ".idea_modules"
 
+scalacOptions in Test ++= Seq("-Yrangepos")
+
 libraryDependencies ++= {
   Seq(
   "org.scalaz" %% "scalaz-core" % "7.0.4",
-  "org.specs2" %% "specs2" % "2.3.1" % "test"
+  "org.specs2" %% "specs2" % "2.3.3" % "test",
+  "org.scalacheck" %% "scalacheck" % "1.11.0" % "test"
   )
 }
