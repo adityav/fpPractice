@@ -1,4 +1,4 @@
-import _root_.Chapter6.State
+import Chapter6.State
 
 /**
  * User: Aditya Vishwakarma
@@ -60,7 +60,7 @@ object Chapter11 {
   case class Reader[R, A](run: R => A)
   object Reader {
     def readerMonad[R] = new Monad[({type f[x] = Reader[R,x]})#f] {
-      def unit[A](a: => A): Reader[R,A] = Reader(r => a)
+      def unit[A](a: A): Reader[R,A] = Reader(r => a)
       def flatMap[A,B](st: Reader[R,A])(f: A => Reader[R,B]): Reader[R,B] = Reader{
         r =>
           val a = st run r
